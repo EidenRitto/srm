@@ -1,7 +1,7 @@
 
 function initpage() {
     //初始化表
-    inittable();
+    inittable('0');
 }
 
 function sub() {
@@ -171,50 +171,73 @@ function addsynctab() {
     });
 }
 
-function inittable() {
+
+function inittable(data) {
     $.ajax({
-        url:'/list/findallsync',
+        url:'/page/allpage',
         type:'POST',
+        data:{page:data},
         success:function (data) {
             console.log(data);
             var html = '';
-            for ( var i = 0; i <data.length; i++){
+            for ( var i = 0; i <data.result.length; i++){
                 var syncstate = '';
-                if (data[i].lastSyncState == "已同步"){
+                if (data.result[i].lastSyncState == "已同步"){
                     syncstate ="<span class='label label-sm label-success'>已同步</span>";
                 }
-                if (data[i].lastSyncState == "同步失败"){
+                if (data.result[i].lastSyncState == "同步失败"){
                     syncstate ="<span class='label label-sm label-warning'>同步失败</span>";
                 }
-                if (data[i].lastSyncState == "未同步"){
+                if (data.result[i].lastSyncState == "未同步"){
                     syncstate = "<span class='label label-sm label-inverse arrowed-in'>未同步</span>";
                 }
                 html += "<tr>\n" +
                     "<td class=\"center\">\n" +
                     "\t<label>\n" +
-                    "\t\t<input type=\"checkbox\" class=\"ace\" />\n" +
+                    "\t\t<input type=\"checkbox\" class=\"ace\" name=\"items\" />\n" +
                     "\t\t<span class=\"lbl\"></span>\n" +
                     "\t</label>\n" +
                     "</td>\n" +
-                    "<td>" + data[i].syncTabName + "</td>" +
-                    "<td>" + data[i].lastSyncDate+ "</td>" +
-                    "<td>" + data[i].syncRateH + "小时/次</td>" +
+                    "<td>" + data.result[i].syncTabName + "</td>" +
+                    "<td>" + data.result[i].lastSyncDate+ "</td>" +
+                    "<td>" + data.result[i].syncRateH + "小时/次</td>" +
                     "<td>0</td>" +
                     "<td class=\"hidden-480\">" + syncstate + "</td>" +
                     "<td>\n" +
                     "<div class=\"visible-md visible-lg hidden-sm hidden-xs btn-group\">\n" +
-                    "<button class=\"btn btn-xs btn-success\" onclick=\"clickbutton("+data[i].id+",'"+data[i].syncTabName+"')\">\n" +
+                    "<button class=\"btn btn-xs btn-success\" onclick=\"clickbutton("+data.result[i].id+")\">\n" +
                     "<i class=\"icon-ok bigger-120\"></i>\n" +
                     "</button>\n" +
                     "<div class=\"col-xs-10\">\n" +
-                    "<div id=\"jdtz"+data[i].id+"\" class=\"progress progress-striped active\" data-percent=\"0% \">\n" +
-                    "<div id=\"jdt"+data[i].id+"\" class=\"progress-bar\" style=\"width: 0%;\"></div>\n" +
+                    "<div id=\"jdtz"+data.result[i].id+"\" class=\"progress progress-striped active\" data-percent=\"0% \">\n" +
+                    "<div id=\"jdt"+data.result[i].id+"\" class=\"progress-bar\" style=\"width: 0%;\"></div>\n" +
                     "</div>\n" +
                     "</div>\n" +
                     "</div>\n" +
                     "</td></tr>";
             }
+             html += "<tr align='center'>\n"
+                    +"<td style='border-color: white;background: white'></td>\n"
+                     +"<td style='border-color: white;background: white'></td>\n"
+                     +"<td style='border-color: white;background: white'>\n"
+                    +"第"+data.currentpage +"页&nbsp;&nbsp; &nbsp;&nbsp;共"+data.totalpages+"页\n"
+                    +"</td>\n"
+                    +"<td style='border-color: white;background: white'>\n"
+                             +"<a href='#' onclick='searchpage('+1+')'> "+"首页"+"</a>\n"
+                             + "<a href='#' onclick='searchpage("+(data.currentpage-1)+")'> "+"上一页"+"</a>\n"
+                             +"<a href='#' onclick='searchpage("+(data.currentpage+1)+")'> "+"下一页"+"</a>\n"
+                             +"<a href='#' onclick='searchpage("+data.totalpages+")'> "+"最后一页"+"</a>\n"
+                     +"</td>\n"
+                     +"<td style='border-color: white;background: white'>\n"
+                     +"转到第："+"<input type='text' name='page' size='2'>"+"&nbsp;页&nbsp;&nbsp;"+"<input type='submit' value='GO' name='cndok'>\n"
+                     +"</td>\n"
+                    +"</tr>"
+
             $("#tbody").html(html);
         }
     });
+}
+
+function searchpage(data){
+    inittable(data);
 }
