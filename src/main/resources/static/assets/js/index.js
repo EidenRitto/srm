@@ -280,8 +280,13 @@ function inittable(data) {
                     "\t</label>\n" +
                     "</td>\n" +
                     "<td>" + data.result[i].syncTabName + "</td>" +
-                    "<td>" + data.result[i].lastSyncDate.substring(0, 10)+ "</td>" +
-                    "<td>" + data.result[i].syncRateH + "小时/次</td>" +
+                    "<td>" + data.result[i].lastSyncDate.substring(0, 10)+ "</td>\n" +
+                    "<td align=\"right\">\n" +
+                    + data.result[i].syncRateH + "小时/次&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;\n"+
+                    "<button class=\"btn btn-primary no-radius btn-xs\"  style=\"width:28px\" onclick=\"edittime("+data.result[i].id+','+data.result[i].syncRateH+")\">\n" +
+                    "<i class=\"icon-edit bigger-50\"></i>\n" +
+                    "</button>"+
+                    "</td>\n" +
                     // "<td>0</td>" +
                     "<td class=\"hidden-480\" id='st"+data.result[i].id+"'>" + syncstate + "</td>" +
                     "<td>\n" +
@@ -397,7 +402,47 @@ function deleteCheckedtab() {
         })
     }
 }
-
-function searchtab() {
-    
+//编辑同步频率
+function edittime(id,time) {
+            layer.open({
+                type: 1,
+                title: '修改同步时间',
+                shadeClose: true,
+                shade: 0.8,
+                anim:4,
+                area: ['400px', '250px'],
+                content: '<form id="form-sync" class="form-horizontal" action="/list/addsynctab" method="POST" role="form" onsubmit="return subedit()";>\n' +
+                '\t\t<div class="space-4"></div>\n' +
+                '\n' +
+                '\t\t<div class="form-group" style="margin-left: 50px;margin-top: 50px">\n' +
+                '\t\t\t<label class="col-sm-3 control-label no-padding-right" for="form-input-readonly"> 同步频率(时/次)</label>\n' +
+                '\n' +
+                '\t\t\t<div class="col-sm-9">\n' +
+                '\t\t\t\t<input type="text" name="syncRateH" class="col-xs-10 col-sm-7" id="edittime" value="'+time+'" />\n' +
+                '\t\t\t</div>\n' +
+                '\t\t</div>\n' +
+                '\t\t\t\t<button class="btn btn-info btn-sm" type="button" onclick="subedit('+id+')" style="margin-left: 150px">\n' +
+                '\t\t\t\t\t<i class="icon-ok bigger-110"></i>\n' +
+                '\t\t\t\t\t提交\n' +
+                '\t\t\t\t</button>\n' +
+                '\n' +
+                '</form>'
+            });
+}
+//提交修改
+function subedit(id) {
+    var timevalue = $('#edittime').val().trim();
+    $.ajax({
+        url:'/list/updatetime',
+        type:'POST',
+        data:{id:id,time:timevalue},
+        success:function (data) {
+            if ( data = "success"){
+                layer.msg("修改同步频率成功！");
+                window.location.reload();
+            }else {
+                layer.msg("修改失败，请联系管理员！");
+            }
+        }
+    })
 }

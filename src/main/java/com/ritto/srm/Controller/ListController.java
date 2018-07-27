@@ -13,6 +13,7 @@ import com.ritto.srm.service.jpa2.cpuRepository2;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -183,6 +184,46 @@ public class ListController {
         return result;
     }
 
+    /**
+     * 通过id查找表信息
+     * @param id
+     * @return
+     */
+    @PostMapping("/findtabbyid")
+    public String findTabByid(String id){
+        int sid = Integer.parseInt(id);
+        String result = "success";
+        try{
+            syncRepository.findById(sid);
+        }catch (Exception e){
+            result = "fail";
+            e.printStackTrace();
+        }
+        return result;
+    }
+
+    /**
+     * 更新表同步频率
+     * @param time
+     * @param id
+     * @return
+     */
+    @Transactional
+    @PostMapping("/updatetime")
+    public String updateTabByid(String time,String id){
+        int sid = Integer.parseInt(id);
+        int stime = Integer.parseInt(time);
+        String result = "";
+        SyncBean syncBean =  syncRepository.findById(sid).get();
+        syncBean.setSyncRateH(stime);
+        if (syncRepository.save(syncBean)!=null){
+            result = "success";
+        }else{
+            result = "fail";
+        }
+
+        return result;
+    }
     /**
      * 勾选多个删除同步表
      * @param ids
