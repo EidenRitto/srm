@@ -1,4 +1,4 @@
-package com.ritto.srm.Util;
+package com.ritto.srm.util;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -6,7 +6,7 @@ import java.sql.SQLException;
 import java.sql.Statement;
 
 /**
- * @Auther: Eiden J.P Zhou
+ * @author : Eiden J.P Zhou
  * @Date: 2018/7/13
  * @Description:
  * @Modified By:

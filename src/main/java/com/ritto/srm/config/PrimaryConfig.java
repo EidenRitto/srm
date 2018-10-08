@@ -1,4 +1,4 @@
-package com.ritto.srm.Config;
+package com.ritto.srm.config;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -7,6 +7,7 @@ import org.springframework.boot.autoconfigure.orm.jpa.JpaProperties;
 import org.springframework.boot.orm.jpa.EntityManagerFactoryBuilder;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Primary;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import org.springframework.orm.jpa.JpaTransactionManager;
 import org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean;
@@ -18,7 +19,7 @@ import javax.sql.DataSource;
 import java.util.Map;
 
 /**
- * @Auther: Eiden J.P Zhou
+ * @author : Eiden J.P Zhou
  * @Date: 2018/7/13
  * @Description:
  * @Modified By:
@@ -26,23 +27,26 @@ import java.util.Map;
 @Configuration
 @EnableTransactionManagement
 @EnableJpaRepositories(
-        entityManagerFactoryRef="entityManagerFactorySecondary",
-        transactionManagerRef="transactionManagerSecondary",
-        basePackages= { "com.ritto.srm.service.jpa2" }) //设置Repository所在位置
-public class SecondaryConfig {
+        entityManagerFactoryRef="entityManagerFactoryPrimary",
+        transactionManagerRef="transactionManagerPrimary",
+        basePackages= { "com.ritto.srm.service.jpa" }) //设置Repository所在位置
+public class PrimaryConfig {
+
     @Autowired
-    @Qualifier("secondaryDataSource")
-    private DataSource secondaryDataSource;
-    @Bean(name = "entityManagerSecondary")
+    @Qualifier("primaryDataSource")
+    private DataSource primaryDataSource;
+    @Primary
+    @Bean(name = "entityManagerPrimary")
     public EntityManager entityManager(EntityManagerFactoryBuilder builder) {
-        return entityManagerFactorySecondary(builder).getObject().createEntityManager();
+        return entityManagerFactoryPrimary(builder).getObject().createEntityManager();
     }
-    @Bean(name = "entityManagerFactorySecondary")
-    public LocalContainerEntityManagerFactoryBean entityManagerFactorySecondary (EntityManagerFactoryBuilder builder) {
+    @Primary
+    @Bean(name = "entityManagerFactoryPrimary")
+    public LocalContainerEntityManagerFactoryBean entityManagerFactoryPrimary (EntityManagerFactoryBuilder builder) {
         return builder
-                .dataSource(secondaryDataSource)
-                .properties(getVendorProperties(secondaryDataSource))
-                .packages("com.ritto.srm.Entity2") //设置实体类所在位置
+                .dataSource(primaryDataSource)
+                .properties(getVendorProperties(primaryDataSource))
+                .packages("com.ritto.srm.entity") //设置实体类所在位置
                 .persistenceUnit("primaryPersistenceUnit")
                 .build();
     }
@@ -51,8 +55,9 @@ public class SecondaryConfig {
     private Map getVendorProperties(DataSource dataSource) {
         return jpaProperties.getHibernateProperties(new HibernateSettings());
     }
-    @Bean(name = "transactionManagerSecondary")
-    PlatformTransactionManager transactionManagerSecondary(EntityManagerFactoryBuilder builder) {
-        return new JpaTransactionManager(entityManagerFactorySecondary(builder).getObject());
+    @Primary
+    @Bean(name = "transactionManagerPrimary")
+    public PlatformTransactionManager transactionManagerPrimary(EntityManagerFactoryBuilder builder) {
+        return new JpaTransactionManager(entityManagerFactoryPrimary(builder).getObject());
     }
 }

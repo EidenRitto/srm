@@ -1,4 +1,4 @@
-package com.ritto.srm.Thread;
+package com.ritto.srm.thread;
 
 import org.springframework.jdbc.core.JdbcTemplate;
 
@@ -11,7 +11,7 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * @Auther: Eiden J.P Zhou
+ * @author : Eiden J.P Zhou
  * @Date: 2018/7/20
  * @Description: 手动同步线程
  * @Modified By:

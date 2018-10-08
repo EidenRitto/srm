@@ -1,8 +1,7 @@
 package com.ritto.srm;
 
-import com.ritto.srm.Entity.CpuBean;
-import com.ritto.srm.Entity.SyncBean;
-import com.ritto.srm.Thread.SyncThread;
+import com.ritto.srm.entity.CpuBean;
+import com.ritto.srm.entity.SyncBean;
 import com.ritto.srm.service.jpa.SyncRepository;
 import com.ritto.srm.service.jpa.cpuRepository;
 import com.ritto.srm.service.jpa2.cpuRepository2;
@@ -17,7 +16,6 @@ import org.springframework.test.context.junit4.SpringRunner;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
-import javax.persistence.Query;
 import javax.transaction.Transactional;
 import java.util.*;
 

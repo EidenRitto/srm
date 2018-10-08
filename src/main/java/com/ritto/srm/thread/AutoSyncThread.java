@@ -1,13 +1,13 @@
-package com.ritto.srm.Thread;
+package com.ritto.srm.thread;
 
-import com.ritto.srm.Entity.SyncBean;
+import com.ritto.srm.entity.SyncBean;
 import org.springframework.jdbc.core.JdbcTemplate;
 
 import javax.persistence.EntityManager;
 import java.util.List;
 
 /**
- * @Auther: Eiden J.P Zhou
+ * @author : Eiden J.P Zhou
  * @Date: 2018/7/19
  * @Description: 自动同步线程
  * @Modified By:

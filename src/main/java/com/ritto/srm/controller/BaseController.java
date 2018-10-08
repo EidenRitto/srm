@@ -1,4 +1,4 @@
-package com.ritto.srm.Controller;
+package com.ritto.srm.controller;
 
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -12,7 +12,7 @@ import java.util.Date;
 import java.util.Map;
 
 /**
- * @Auther: Eiden J.P Zhou
+ * @author : Eiden J.P Zhou
  * @Date: 2018/4/11
  * @Description:
  * @Modified By:

@@ -1,4 +1,4 @@
-package com.ritto.srm.Config;
+package com.ritto.srm.config;
 
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.context.properties.ConfigurationProperties;
@@ -12,7 +12,7 @@ import javax.sql.DataSource;
 
 
 /**
- * @Auther: Eiden J.P Zhou
+ * @author : Eiden J.P Zhou
  * @Date: 2018/7/13
  * @Description:
  * @Modified By:

@@ -1,11 +1,11 @@
-package com.ritto.srm.Entity;
+package com.ritto.srm.entity;
 
 import javax.persistence.*;
 import java.sql.Timestamp;
 import java.util.Objects;
 
 /**
- * @Auther: Eiden J.P Zhou
+ * @author : Eiden J.P Zhou
  * @Date: 2018/7/17
  * @Description:
  * @Modified By:
