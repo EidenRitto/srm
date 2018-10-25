@@ -11,7 +11,7 @@ import java.util.Objects;
  * @Modified By:
  */
 @Entity
-@Table(name = "sync", schema = "Hotel_manage", catalog = "")
+@Table(name = "sync", schema = "vcos_lyg", catalog = "")
 public class SyncBean {
     private int id;
     private String syncTabName;

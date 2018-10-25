@@ -1,15 +1,16 @@
 
 package com.ritto.srm.controller;
 
-import com.ritto.srm.entity.CpuBean;
+//import com.ritto.srm.entity.CpuBean;
 import com.ritto.srm.entity.SyncBean;
-import com.ritto.srm.entity2.CpuBeanBack;
+//import com.ritto.srm.entity2.CpuBeanBack;
 import com.ritto.srm.thread.AutoSyncThread;
 import com.ritto.srm.thread.SyncThread;
+import com.ritto.srm.util.DBUtil;
 import com.ritto.srm.util.ObjectConvertor;
 import com.ritto.srm.service.jpa.SyncRepository;
-import com.ritto.srm.service.jpa.cpuRepository;
-import com.ritto.srm.service.jpa2.cpuRepository2;
+//import com.ritto.srm.service.jpa.cpuRepository;
+//import com.ritto.srm.service.jpa2.cpuRepository2;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -49,11 +50,11 @@ public class ListController {
     @Autowired
     private SyncRepository syncRepository;
 
-    @Autowired
-    private cpuRepository cpuRepository;
-
-    @Autowired
-    private cpuRepository2 cpuRepository2;
+//    @Autowired
+//    private cpuRepository cpuRepository;
+//
+//    @Autowired
+//    private cpuRepository2 cpuRepository2;
 
     private ObjectConvertor convertor;
 
@@ -61,15 +62,12 @@ public class ListController {
 
     @GetMapping("/dothis")
     public String dothis(){
-        convertor = new ObjectConvertor();
-        List<CpuBean> cpuBeanList = cpuRepository.findAll();
-        cpuBeanList.forEach(cpuBean -> {
-            //连接另外一个数据库，然后持久化这个输出
-            CpuBeanBack cpuBeanBack = convertor.toAnotherObj(cpuBean, CpuBeanBack.class);
-            //断言不为空
-
-            cpuRepository2.save(cpuBeanBack);
-        });
+        List<SyncBean> beanList = syncRepository.findAll();
+        if (autoSyncThread != null){
+            autoSyncThread.exit = true;
+        }
+        autoSyncThread = new AutoSyncThread(beanList,jdbcTemplate1,jdbcTemplate2,entityManager);
+        autoSyncThread.start();
         return "";
     }
 
@@ -89,8 +87,8 @@ public class ListController {
 
     @PostMapping("/findalltab")
     public List findAlltable(){
-
-        List tablelist = entityManager.createNativeQuery("select table_name from information_schema.tables where table_schema='Hotel_manage'").getResultList();
+        List tablelist = jdbcTemplate2.queryForList("select table_name from information_schema.tables where table_schema='cashmanager'",String.class);
+//        List tablelist = entityManager.createNativeQuery("select table_name from information_schema.tables where table_schema='vcos_lyg'").getResultList();
         return tablelist;
     }
 
@@ -108,7 +106,9 @@ public class ListController {
         String result = "fail";
         sb.setLastSyncDate(new Timestamp(new Date().getTime()));
         sb.setLastSyncState("未同步");
-        sb.setDataIndex(0);
+
+        List<Integer> list = jdbcTemplate2.queryForList("SELECT count(*) from "+sb.getSyncTabName(),Integer.class);
+        sb.setDataIndex(list.get(0));
         if (null != syncRepository.save(sb)){
             List<SyncBean> beanList = syncRepository.findAll();
             if (autoSyncThread != null){
@@ -240,6 +240,14 @@ public class ListController {
             result = "fail";
         }
         return result;
+    }
 
+    @PostMapping("/isSignal")
+    public String isSignal(){
+        String result = "fail";
+        if (DBUtil.getConn()!=null){
+            result = "success";
+        }
+        return result;
     }
 }

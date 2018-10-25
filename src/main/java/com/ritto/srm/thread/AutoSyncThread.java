@@ -36,7 +36,8 @@ public class AutoSyncThread extends Thread {
         while (!exit){
 
             try {
-                Thread.sleep(3600000);//休眠一小时
+                //休眠一分钟
+                Thread.sleep(60000);
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }

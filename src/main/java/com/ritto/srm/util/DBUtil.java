@@ -21,9 +21,9 @@ public class DBUtil {
         Connection conn = null;
         try {
             String driver = "com.mysql.jdbc.Driver";
-            String url = "jdbc:mysql://45.76.217.25:3306/Hotel_manage";
+            String url = "jdbc:mysql://192.168.241.111:3306/cashmanager";
             String user = "root";
-            String password = "zjp123";
+            String password = "VONEchina20!&";
             Class.forName(driver);
             conn = DriverManager.getConnection(url, user, password);
             conn.setAutoCommit(true);

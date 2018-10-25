@@ -1,7 +1,21 @@
 
 function initpage() {
+    $("#noSignal").hide();
+    $("#signal").hide();
     //初始化表
     inittable('0');
+
+    $.ajax({
+        url:'/list/isSignal',
+        type:'POST',
+        success:function (data) {
+            if(data=='success'){
+                $("#signal").show();
+            }else {
+                $("#noSignal").show();
+            }
+        }
+    });
 }
 //重置表单
 function reset() {
@@ -94,7 +108,7 @@ function clickbutton(id,synctabname) {
                  }
              }
          });
-    }, 1000);
+    }, 2000);
 
     // for (var i = 0;i<100;i++){
     //     sleep(1);
@@ -217,7 +231,7 @@ function addsynctab() {
                 '\t\t<div class="space-4"></div>\n' +
                 '\n' +
                 '\t\t<div class="form-group" style="margin-left: 60px">\n' +
-                '\t\t\t<label class="col-sm-3 control-label no-padding-right" for="form-input-readonly"> 同步频率(时/次)</label>\n' +
+                '\t\t\t<label class="col-sm-3 control-label no-padding-right" for="form-input-readonly"> 同步频率(分钟/次)</label>\n' +
                 '\n' +
                 '\t\t\t<div class="col-sm-8">\n' +
                 '\t\t\t\t<input type="text" name="syncRateH" class="col-xs-10 col-sm-7" id="form-input-readonly" value="" />\n' +
@@ -282,7 +296,7 @@ function inittable(data) {
                     "<td>" + data.result[i].syncTabName + "</td>" +
                     "<td>" + data.result[i].lastSyncDate.substring(0, 10)+ "</td>\n" +
                     "<td align=\"right\">\n" +
-                    + data.result[i].syncRateH + "小时/次&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;\n"+
+                    + data.result[i].syncRateH + "分钟/次&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;\n"+
                     "<button class=\"btn btn-primary no-radius btn-xs\"  style=\"width:28px\" onclick=\"edittime("+data.result[i].id+','+data.result[i].syncRateH+")\">\n" +
                     "<i class=\"icon-edit bigger-50\"></i>\n" +
                     "</button>"+
@@ -415,7 +429,7 @@ function edittime(id,time) {
                 '\t\t<div class="space-4"></div>\n' +
                 '\n' +
                 '\t\t<div class="form-group" style="margin-left: 50px;margin-top: 50px">\n' +
-                '\t\t\t<label class="col-sm-3 control-label no-padding-right" for="form-input-readonly"> 同步频率(时/次)</label>\n' +
+                '\t\t\t<label class="col-sm-3 control-label no-padding-right" for="form-input-readonly"> 同步频率(分钟/次)</label>\n' +
                 '\n' +
                 '\t\t\t<div class="col-sm-9">\n' +
                 '\t\t\t\t<input type="text" name="syncRateH" class="col-xs-10 col-sm-7" id="edittime" value="'+time+'" />\n' +

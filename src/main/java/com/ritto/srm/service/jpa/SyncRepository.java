@@ -12,6 +12,8 @@ import org.springframework.data.jpa.repository.Query;
  */
 public interface SyncRepository extends JpaRepository<SyncBean,Integer> {
     @Query(value = "select count(*) from sync", nativeQuery = true)
+
+    @Override
     public long count();
 
     public SyncBean findBySyncTabName(String tabname);

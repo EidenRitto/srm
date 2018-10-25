@@ -68,7 +68,11 @@ public class PageController {
             sql.append("%'");
         }
         sql.append(" order by id limit ");
-        sql.append((pages-1)*limit);
+        if (pages == 0){
+            sql.append(0);
+        }else {
+            sql.append((pages-1)*limit);
+        }
         sql.append(" , ");
         sql.append(limit);
         List<SyncBean> listAll = jdbcTemplate1.query(sql.toString(), new Object[]{},new BeanPropertyRowMapper<SyncBean>(SyncBean.class));
