@@ -87,7 +87,8 @@ public class ListController {
 
     @PostMapping("/findalltab")
     public List findAlltable(){
-        List tablelist = jdbcTemplate2.queryForList("select table_name from information_schema.tables where table_schema='cashmanager'",String.class);
+        List tablelist = jdbcTemplate2.queryForList("select table_name from information_schema.tables " +
+                "where table_schema='vcos_lyg'",String.class);
 //        List tablelist = entityManager.createNativeQuery("select table_name from information_schema.tables where table_schema='vcos_lyg'").getResultList();
         return tablelist;
     }
@@ -109,14 +110,25 @@ public class ListController {
 
         List<Integer> list = jdbcTemplate2.queryForList("SELECT count(*) from "+sb.getSyncTabName(),Integer.class);
         sb.setDataIndex(list.get(0));
-        if (null != syncRepository.save(sb)){
-            List<SyncBean> beanList = syncRepository.findAll();
-            if (autoSyncThread != null){
-                autoSyncThread.exit = true;
-            }
+        syncRepository.save(sb);
+        result = "success";
+
+        return result;
+    }
+
+    @PostMapping("/doautosync")
+    public String doautosync(){
+        String result ;
+        List<SyncBean> beanList = syncRepository.findAll();
+        if (autoSyncThread != null){
+            autoSyncThread.exit = true;
+            result="close";
+            System.out.println("===正在关闭自动同步===");
+        }else {
             autoSyncThread = new AutoSyncThread(beanList,jdbcTemplate1,jdbcTemplate2,entityManager);
             autoSyncThread.start();
-            result = "success";
+            result="open";
+            System.out.println("===开始自动同步===");
         }
         return result;
     }

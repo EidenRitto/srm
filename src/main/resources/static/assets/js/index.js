@@ -196,6 +196,17 @@ function exit() {
     self.location='/logout';
 }
 
+//开启自动同步
+function autosynctab() {
+    $.ajax({
+        url:'/list/doautosync',
+        type:'POST',
+        success:function (data) {
+            
+        }
+    });
+}
+
 //添加同步表
 function addsynctab() {
     $.ajax({

@@ -21,7 +21,7 @@ public class DBUtil {
         Connection conn = null;
         try {
             String driver = "com.mysql.jdbc.Driver";
-            String url = "jdbc:mysql://192.168.241.111:3306/cashmanager";
+            String url = "jdbc:mysql://152.152.16.202:3306/vcos_lyg";
             String user = "root";
             String password = "VONEchina20!&";
             Class.forName(driver);
